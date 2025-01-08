@@ -4,7 +4,7 @@
 //% block="Data Logger"
 //% icon="\uf0ce"
 //% color="#378273"
-namespace datalogger {
+namespace gdatalogger {
   export enum DeleteType {
       //% block="fast"
       Fast,
