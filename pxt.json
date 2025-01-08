@@ -5,6 +5,7 @@
   "dependencies": {
     "core": "*"
   },
+  "files": ["datalogger.ts"],
   "testFiles": ["test.ts"],
   "public": true
 }
