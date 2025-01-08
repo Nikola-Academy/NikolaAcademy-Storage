@@ -136,16 +136,16 @@ namespace gdatalogger {
   //% group="micro:bit (V2)"
   //% weight=100 help=datalogger/log
   export function log(
-      data1: datalogger.ColumnValue,
-      data2?: datalogger.ColumnValue,
-      data3?: datalogger.ColumnValue,
-      data4?: datalogger.ColumnValue,
-      data5?: datalogger.ColumnValue,
-      data6?: datalogger.ColumnValue,
-      data7?: datalogger.ColumnValue,
-      data8?: datalogger.ColumnValue,
-      data9?: datalogger.ColumnValue,
-      data10?: datalogger.ColumnValue
+      data1: gdatalogger.ColumnValue,
+      data2?: gdatalogger.ColumnValue,
+      data3?: gdatalogger.ColumnValue,
+      data4?: gdatalogger.ColumnValue,
+      data5?: gdatalogger.ColumnValue,
+      data6?: gdatalogger.ColumnValue,
+      data7?: gdatalogger.ColumnValue,
+      data8?: gdatalogger.ColumnValue,
+      data9?: gdatalogger.ColumnValue,
+      data10?: gdatalogger.ColumnValue
   ): void {
       logData(
           [
