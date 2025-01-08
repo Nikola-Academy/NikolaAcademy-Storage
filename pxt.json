@@ -1,0 +1,10 @@
+{
+  "name": "datalogger",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "core": "*"
+  },
+  "testFiles": ["test.ts"],
+  "public": true
+}
