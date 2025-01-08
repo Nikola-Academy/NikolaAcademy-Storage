@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "core": "*"
-  },
+        "core": "file:../core",
+        "flashlog": "file:../flashlog"
+    },
   "files": ["gdatalogger.ts"],
   "testFiles": ["test.ts"],
   "public": true
