@@ -1,18 +1,3 @@
-import * as flashlog from './flashlog';
-import * as datastore from './datastore';
-import * as basic from './basic';
-import * as control from './control';
-import * as DAL from './DAL';
-
-enum FlashLogTimeStampFormat {
-    None,
-    Milliseconds,
-    Seconds,
-    Minutes,
-    Hours,
-    Days
-}
-
 /**
  * Save data to flash storage
  */
@@ -199,6 +184,7 @@ namespace datastorage {
     //% inlineInputMode="variable"
     //% inlineInputModeLimit=1
     //% group="micro:bit (V2)"
+    //% blockHidden=true
     //% weight=100 help=datalogger/log
     export function log(
         data1: datastore.ColumnValue,
