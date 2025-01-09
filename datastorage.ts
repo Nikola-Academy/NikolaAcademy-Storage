@@ -88,7 +88,7 @@ namespace datastorage {
      */
     //% block="set $variableName in storage to $value"
     //% blockId=dataloggersavedata
-    //% variableName.shadow=lists_create_with
+    //% variableName.shadow=datalogger_columnfield
     //% value.shadow=math_number
     //% group="micro:bit (V2)"
     //% weight=100
