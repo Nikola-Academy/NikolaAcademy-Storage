@@ -83,7 +83,7 @@ namespace datastorage {
 
     /**
      * Save data to long term Micro:bit storage
-     * @param variableName variable name to be stored to flash storage ; eg: "name"
+     * @param variableName variable name to be stored to flash storage; eg: "name"
      * @param value value to be stored to flash storage; eg: 10
      */
     //% block="set $variableName in storage to $value"
