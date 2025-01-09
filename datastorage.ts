@@ -113,7 +113,7 @@ namespace datastorage {
             });
 
             // If variable name doesn't exist in columns, add it
-            if (!columnList.includes(variableName)) {
+            if (columnList.indexOf(variableName) === -1) {
                 data.push(createCV(variableName, value));
             }
         } else {
@@ -187,15 +187,15 @@ namespace datastorage {
     //% blockHidden=true
     //% weight=100 help=datalogger/log
     export function log(
-        data1: datastore.ColumnValue,
-        data2?: datastore.ColumnValue,
-        data3?: datastore.ColumnValue,
-        data4?: datastore.ColumnValue,
-        data5?: datastore.ColumnValue,
-        data6?: datastore.ColumnValue,
-        data7?: datastore.ColumnValue,
-        data8?: datastore.ColumnValue,
-        data9?: datastore.ColumnValue,
+        data1: datastorage.ColumnValue,
+        data2?: datastorage.ColumnValue,
+        data3?: datastorage.ColumnValue,
+        data4?: datastorage.ColumnValue,
+        data5?: datastorage.ColumnValue,
+        data6?: datastorage.ColumnValue,
+        data7?: datastorage.ColumnValue,
+        data8?: datastorage.ColumnValue,
+        data9?: datastorage.ColumnValue,
     ): void {
         logData(
             [
@@ -406,20 +406,20 @@ namespace datastorage {
   //% group="micro:bit (V2)"
   //% weight=99 help=datalogger/get-rows
   export function getData(name: string): string {
-    if (!name) return;
+    if (!name) return ""; // Return empty string if name is null/empty
     
     init();
 
     let columnNames = flashlog.getRows(1, 1);
 
-    if (columnNames.length == 0) return;
+    if (columnNames.length == 0) return ""; // Return empty string if no data exists
 
     let columnList = columnNames.split(",");
     let index = columnList.indexOf(name);
-    if (index <= -1) return;
+    if (index <= -1) return ""; // Return empty string if variable not found
     
     let datas = flashlog.getRows(1, 2).split(",");
 
     return datas[index];
-}
+  }
 }
