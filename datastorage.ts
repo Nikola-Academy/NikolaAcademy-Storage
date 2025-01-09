@@ -91,8 +91,6 @@ namespace datastorage {
     //% variableName.shadow=lists_create_with
     //% value.shadow=math_number
     //% group="micro:bit (V2)"
-    //% inlineInputMode="variable"
-    //% inlineInputModeLimit=1
     //% weight=100
     export function saveData(variableName: string, value: any): void {
         if (_disabled) return;
