@@ -84,7 +84,7 @@ namespace datastorage {
     /**
      * Save data to long term Micro:bit storage
      * @param variableName variable name to be stored to flash storage
-     * @param value value to be stored to flash storage
+     * @param value variable name to be stored to flash storage
      */
     //% block="set $variableName in storage to $value"
     //% blockId=dataloggerlogdata
@@ -103,7 +103,7 @@ namespace datastorage {
 
         if (columnNames.length != 0) {
             // Storage has existing data
-            let columnList = columnNames.split(",");
+            let columnList: string[] = columnNames.split(",");
             let existingData = flashlog.getRows(1, 2).split(",");
             
             // Create new data array with all existing columns and values
@@ -113,7 +113,7 @@ namespace datastorage {
             });
 
             // If variable name doesn't exist in columns, add it
-            if (!columnList.includes(variableName)) {
+            if (columnList.indexOf(variableName) === -1) {
                 data.push(createCV(variableName, value));
             }
         } else {
