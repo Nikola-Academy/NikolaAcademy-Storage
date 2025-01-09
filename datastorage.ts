@@ -1,10 +1,25 @@
+import * as flashlog from './flashlog';
+import * as datastore from './datastore';
+import * as basic from './basic';
+import * as control from './control';
+import * as DAL from './DAL';
+
+enum FlashLogTimeStampFormat {
+    None,
+    Milliseconds,
+    Seconds,
+    Minutes,
+    Hours,
+    Days
+}
+
 /**
- * Log data to flash storage
+ * Save data to flash storage
  */
-//% block="Data Logger"
-//% icon="\uf0ce"
-//% color="#378273"
-namespace gdatalogger {
+//% block="Data Storage"
+//% icon="\uf468"
+//% color="#22ABB2"
+namespace datastorage {
     export enum DeleteType {
         //% block="fast"
         Fast,
@@ -12,7 +27,7 @@ namespace gdatalogger {
         Full
     }
 
-    let onLogFullHandler: () => void;
+    let onStorageFullHandler: () => void;
     let _disabled = false;
 
     let initialized = false;
@@ -21,24 +36,24 @@ namespace gdatalogger {
             return;
         initialized = true;
 
-        includeTimestamp(FlashLogTimeStampFormat.Seconds);
+        includeTimestamp(FlashLogTimeStampFormat.None);
         mirrorToSerial(false);
 
         control.onEvent(DAL.MICROBIT_ID_LOG, DAL.MICROBIT_LOG_EVT_LOG_FULL, () => {
             _disabled = true;
-            if (onLogFullHandler) {
-                onLogFullHandler();
+            if (onStorageFullHandler) {
+                onStorageFullHandler();
             } else {
                 basic.showLeds(`
-                    # . . . #
-                    # # . # #
-                    . . . . .
-                    . # # # .
-                    # . . . #
+                    . # . # .
+                    # # # # #
+                    . # . # .
+                    # # # # #
+                    . # . # .
                 `);
                 basic.pause(1000);
                 basic.clearScreen();
-                basic.showString("928");
+                basic.showString("rA9");
             }
         });
     }
@@ -65,6 +80,7 @@ namespace gdatalogger {
     //% column.shadow=datalogger_columnfield
     //% blockId=dataloggercreatecolumnvalue
     //% group="micro:bit (V2)"
+    //% blockHidden=true
     //% weight=80 help=datalogger/create-cv
     export function createCV(column: string, value: any): ColumnValue {
         return new ColumnValue(column, value);
@@ -81,10 +97,60 @@ namespace gdatalogger {
     }
 
     /**
+     * Save data to long term Micro:bit storage
+     * @param variableName variable name to be stored to flash storage
+     * @param variableName variable name to be stored to flash storage
+     */
+    //% block="set $variableName in storage to $value"
+    //% blockId=dataloggerlogdata
+    //% data.shadow=lists_create_with
+    //% data.defl=dataloggercreatecolumnvalue
+    //% group="micro:bit (V2)"
+    //% weight=100
+    export function saveData(variableName: string, value: number): void {
+        if (_disabled) return;
+        if (!variableName || value === undefined) return;
+
+        init();
+
+        let data: ColumnValue[];
+        let columnNames = flashlog.getRows(1, 1);
+
+        if (columnNames.length != 0) {
+            // Storage has existing data
+            let columnList = columnNames.split(",");
+            let existingData = flashlog.getRows(1, 2).split(",");
+            
+            // Create new data array with all existing columns and values
+            data = columnList.map((col, index) => {
+                let val = col === variableName ? value : existingData[index];
+                return createCV(col, val);
+            });
+
+            // If variable name doesn't exist in columns, add it
+            if (!columnList.includes(variableName)) {
+                data.push(createCV(variableName, value));
+            }
+        } else {
+            // Storage is empty, create new entry
+            data = [createCV(variableName, value)];
+        }
+        
+        // Clear existing data and write new data
+        deleteLog();
+        
+        flashlog.beginRow();
+        for (const cv of data) {
+            flashlog.logData(cv.column, cv.value);
+        }
+        flashlog.endRow();
+    }
+
+    /**
      * Log data to flash storage
      * @param data Array of data to be logged to flash storage
      */
-    //% block="log data array $data"
+    //% block="set data array $data"
     //% blockId=dataloggerlogdata
     //% data.shadow=lists_create_with
     //% data.defl=dataloggercreatecolumnvalue
@@ -105,6 +171,7 @@ namespace gdatalogger {
         }
         flashlog.endRow();
     }
+    
 
     /**
      * Log data to flash storage
@@ -117,7 +184,6 @@ namespace gdatalogger {
      * @param data7 [optional] seventh column and value to be logged
      * @param data8 [optional] eighth column and value to be logged
      * @param data9 [optional] ninth column and value to be logged
-     * @param data10 [optional] tenth column and value to be logged
      */
     //% block="log data $data1||$data2 $data3 $data4 $data5 $data6 $data7 $data8 $data9 $data10"
     //% blockId=dataloggerlog
@@ -130,22 +196,20 @@ namespace gdatalogger {
     //% data7.shadow=dataloggercreatecolumnvalue
     //% data8.shadow=dataloggercreatecolumnvalue
     //% data9.shadow=dataloggercreatecolumnvalue
-    //% data10.shadow=dataloggercreatecolumnvalue
     //% inlineInputMode="variable"
     //% inlineInputModeLimit=1
     //% group="micro:bit (V2)"
     //% weight=100 help=datalogger/log
     export function log(
-        data1: gdatalogger.ColumnValue,
-        data2?: gdatalogger.ColumnValue,
-        data3?: gdatalogger.ColumnValue,
-        data4?: gdatalogger.ColumnValue,
-        data5?: gdatalogger.ColumnValue,
-        data6?: gdatalogger.ColumnValue,
-        data7?: gdatalogger.ColumnValue,
-        data8?: gdatalogger.ColumnValue,
-        data9?: gdatalogger.ColumnValue,
-        data10?: gdatalogger.ColumnValue
+        data1: datastore.ColumnValue,
+        data2?: datastore.ColumnValue,
+        data3?: datastore.ColumnValue,
+        data4?: datastore.ColumnValue,
+        data5?: datastore.ColumnValue,
+        data6?: datastore.ColumnValue,
+        data7?: datastore.ColumnValue,
+        data8?: datastore.ColumnValue,
+        data9?: datastore.ColumnValue,
     ): void {
         logData(
             [
@@ -158,10 +222,11 @@ namespace gdatalogger {
                 data7,
                 data8,
                 data9,
-                data10,
             ].filter(el => !!el)
         );
     }
+
+
 
     /**
      * Set the columns for future data logging
@@ -192,13 +257,13 @@ namespace gdatalogger {
      * @param col7 Title for seventh column to be added
      * @param col8 Title for eighth column to be added
      * @param col9 Title for ninth column to be added
-     * @param col10 Title for tenth column to be added
      */
     //% block="set columns $col1||$col2 $col3 $col4 $col5 $col6 $col7 $col8 $col9 $col10"
     //% blockId=dataloggersetcolumntitles
     //% inlineInputMode="variable"
     //% inlineInputModeLimit=1
     //% group="micro:bit (V2)"
+    //% blockHidden=true
     //% weight=70 help=datalogger/set-column-titles
     //% col1.shadow=datalogger_columnfield
     //% col2.shadow=datalogger_columnfield
@@ -209,7 +274,6 @@ namespace gdatalogger {
     //% col7.shadow=datalogger_columnfield
     //% col8.shadow=datalogger_columnfield
     //% col9.shadow=datalogger_columnfield
-    //% col10.shadow=datalogger_columnfield
     export function setColumnTitles(
         col1: string,
         col2?: string,
@@ -220,28 +284,24 @@ namespace gdatalogger {
         col7?: string,
         col8?: string,
         col9?: string,
-        col10?: string
     ): void {
         logData(
-            [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10]
+            [col1, col2, col3, col4, col5, col6, col7, col8, col9]
                 .filter(el => !!el)
                 .map(col => createCV(col, ""))
         );
     }
 
     /**
-     * Delete all existing logs, including column headers. By default this only marks the log as
-     * overwriteable / deletable in the future.
-     * @param deleteType optional set whether a deletion will be fast or full
+     * Delete all existing stored variable.
      */
-    //% block="delete log||$deleteType"
+    //% block="delete storage"
     //% blockId=dataloggerdeletelog
     //% group="micro:bit (V2)"
-    //% weight=60 help=datalogger/delete-log
-    export function deleteLog(deleteType?: DeleteType): void {
+    //% weight=97 help=datalogger/delete-log
+    export function deleteLog(): void {
         init();
-        flashlog.clear(deleteType === DeleteType.Full);
-        _disabled = false;
+        flashlog.clear(true); //false:fast, true:full
     }
 
     /**
@@ -251,10 +311,11 @@ namespace gdatalogger {
     //% block="on log full"
     //% blockId="on log full"
     //% group="micro:bit (V2)"
+    //% blockHidden=true
     //% weight=40 help=datalogger/on-log-full
     export function onLogFull(handler: () => void): void {
         init();
-        onLogFullHandler = handler;
+        onStorageFullHandler = handler;
     }
 
     /**
@@ -265,6 +326,7 @@ namespace gdatalogger {
     //% blockId=dataloggertoggleincludetimestamp
     //% format.defl=FlashLogTimeStampFormat.None
     //% group="micro:bit (V2)"
+    //% blockHidden=true
     //% weight=30 help=datalogger/include-timestamp
     export function includeTimestamp(format: FlashLogTimeStampFormat): void {
         init();
@@ -279,6 +341,7 @@ namespace gdatalogger {
     //% blockId=dataloggertogglemirrortoserial
     //% on.shadow=toggleOnOff
     //% on.defl=false
+    //% blockHidden=true
     //% weight=25 help=datalogger/mirror-to-serial
     export function mirrorToSerial(on: boolean): void {
         // TODO:/note intentionally does not have group, as having the same group for all
@@ -293,15 +356,38 @@ namespace gdatalogger {
    * @param fromRowIndex 0-based index of start
    * @returns header + rows
    */
-  //% block="get number row $row"
-  //% row.shadow=math_number
+  //% block="get number row $fromRowIndex"
+  //% fromRowIndex.shadow=math_number
   //% blockId=dataloggergetnumberofrows
   //% group="micro:bit (V2)"
+  //% blockHidden=true
   //% weight=80 help=datalogger/get-number-of-rows
   export function getNumberOfRows(fromRowIndex: number = 0): number {
       init();
       return flashlog.getNumberOfRows(fromRowIndex);
   }
+
+  /**
+   * Number of variable currently used by the datalogger, start counting at fromRowIndex
+   * Treats the header as the first row
+   * @param fromRowIndex 0-based index of start
+   * @returns header + rows
+   */
+  //% block="get variable count"
+  //% blockId=dataloggergetnumberofcolumns
+  //% group="micro:bit (V2)"
+  //% weight=98 help=datalogger/get-number-of-columns
+  export function getNumberOfColumns(): number {
+    init();
+
+    let columnNames = flashlog.getRows(1, 1);
+
+    if (columnNames.length == 0) return 0;
+
+    let columnList = columnNames.split(",");
+    return columnList.length;
+  }
+
 
   /**
    * Get all rows seperated by a newline & each column seperated by a comma.
@@ -315,9 +401,39 @@ namespace gdatalogger {
   //% nRows.shadow=math_number
   //% blockId=dataloggergetrows
   //% group="micro:bit (V2)"
+  //% blockHidden=true
   //% weight=80 help=datalogger/get-rows
   export function getRows(fromRowIndex: number, nRows: number): string {
       init();
       return flashlog.getRows(fromRowIndex, nRows);
   }
+
+  /**
+   * Get all rows seperated by a newline & each column seperated by a comma.
+   * Starting at the 0-based index fromRowIndex & counting inclusively until nRows.
+   * @param name Variable name; eg: "name1"
+   * @returns String from the column value
+   */
+  //% block="get $name"
+  //% fromName.shadow=datalogger_columnfield
+  //% blockId=dataloggergetcolumn
+  //% group="micro:bit (V2)"
+  //% weight=99 help=datalogger/get-rows
+  export function getData(name: string): string {
+    if (!name) return;
+    
+    init();
+
+    let columnNames = flashlog.getRows(1, 1);
+
+    if (columnNames.length == 0) return;
+
+    let columnList = columnNames.split(",");
+    let index = columnList.indexOf(name);
+    if (index <= -1) return;
+    
+    let datas = flashlog.getRows(1, 2).split(",");
+
+    return datas[index];
+}
 }

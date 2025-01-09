@@ -1,12 +1,12 @@
 {
-  "name": "gdatalogger",
+  "name": "datastorage",
   "version": "1.0.0",
   "description": "",
   "dependencies": {
         "core": "file:../core",
         "flashlog": "file:../flashlog"
     },
-  "files": ["gdatalogger.ts"],
+  "files": ["datastorage.ts"],
   "testFiles": ["test.ts"],
   "public": true
 }

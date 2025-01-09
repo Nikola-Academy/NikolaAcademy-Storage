@@ -1,6 +1,4 @@
-# BBC micro:bit MakeCode editor extension for datalogging
-
-Added a getter for the data from the datalogger.
+# BBC micro:bit MakeCode editor extension for data storage
 
 ## License
 
