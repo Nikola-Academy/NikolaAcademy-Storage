@@ -84,7 +84,7 @@ namespace datastorage {
     /**
      * Save data to long term Micro:bit storage
      * @param variableName variable name to be stored to flash storage
-     * @param variableName variable name to be stored to flash storage
+     * @param value value to be stored to flash storage
      */
     //% block="set $variableName in storage to $value"
     //% blockId=dataloggerlogdata
@@ -92,7 +92,7 @@ namespace datastorage {
     //% data.defl=dataloggercreatecolumnvalue
     //% group="micro:bit (V2)"
     //% weight=100
-    export function saveData(variableName: string, value: number): void {
+    export function saveData(variableName: string, value: any): void {
         if (_disabled) return;
         if (!variableName || value === undefined) return;
 
