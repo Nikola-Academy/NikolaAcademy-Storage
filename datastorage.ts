@@ -83,16 +83,16 @@ namespace datastorage {
 
     /**
      * Save data to long term Micro:bit storage
-     * @param variableName variable name to be stored to flash storage; eg: "name"
-     * @param value value to be stored to flash storage; eg: 10
+     * @param variableName variable name to be stored to flash storage
+     * @param variableName variable name to be stored to flash storage
      */
     //% block="set $variableName in storage to $value"
-    //% blockId=dataloggersavedata
-    //% variableName.shadow=datalogger_columnfield
-    //% value.shadow=math_number
+    //% blockId=dataloggerlogdata
+    //% data.shadow=lists_create_with
+    //% data.defl=dataloggercreatecolumnvalue
     //% group="micro:bit (V2)"
     //% weight=100
-    export function saveData(variableName: string, value: any): void {
+    export function saveData(variableName: string, value: number): void {
         if (_disabled) return;
         if (!variableName || value === undefined) return;
 
@@ -113,7 +113,7 @@ namespace datastorage {
             });
 
             // If variable name doesn't exist in columns, add it
-            if (columnList.indexOf(variableName) === -1) {
+            if (!columnList.includes(variableName)) {
                 data.push(createCV(variableName, value));
             }
         } else {
@@ -397,7 +397,7 @@ namespace datastorage {
   /**
    * Get all rows seperated by a newline & each column seperated by a comma.
    * Starting at the 0-based index fromRowIndex & counting inclusively until nRows.
-   * @param name Variable name; eg: "name"
+   * @param name Variable name; eg: "name1"
    * @returns String from the column value
    */
   //% block="get $name"
