@@ -98,14 +98,14 @@ namespace datastorage {
 
         init();
 
-        let data: ColumnValue[];
+        let data: ColumnValue[] = [];
         let columnNames = flashlog.getRows(1, 1);
 
         if (columnNames.length != 0) {
             // Storage has existing data
             let columnList: string[] = columnNames.split(",");
             let existingData = flashlog.getRows(1, 2).split(",");
-            
+
             // Create new data array with all existing columns and values
             data = columnList.map((col, index) => {
                 let val = col === variableName ? value : existingData[index];
