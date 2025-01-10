@@ -410,14 +410,15 @@ namespace datastorage {
     
     init();
 
-    let columnNames = flashlog.getRows(1, 1);
-    if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
+    // let columnNames = flashlog.getRows(1, 1);
+    // if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
 
-    let columnList = columnNames.split(",");
-    let index = columnList.indexOf(name);
-    if (index == -1) return "-1"; // Return empty string if variable not found
+    // let columnList = columnNames.split(",");
+    // let index = columnList.indexOf(name);
+    // if (index == -1) return "-1"; // Return empty string if variable not found
     
-    let datas = flashlog.getRows(1, 2).split(",");
-    return datas[index] || "-1"; // Return the value or empty string if undefined
-  }
+    // let datas = flashlog.getRows(1, 2).split(",");
+    // return datas[index] || "-1"; // Return the value or empty string if undefined
+    return flashlog.getRows(1, 2);
+}
 }
