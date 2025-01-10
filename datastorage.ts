@@ -410,13 +410,12 @@ namespace datastorage {
     
     init();
 
+    if (getNumberOfColumns() == 0) return ""; // Return empty string if no data exists
     let columnNames = flashlog.getRows(1, 1);
-
-    if (columnNames.length == 0) return ""; // Return empty string if no data exists
 
     let columnList = columnNames.split(",");
     let index = columnList.indexOf(name);
-    if (index <= -1) return ""; // Return empty string if variable not found
+    if (index == -1) return ""; // Return empty string if variable not found
     
     let datas = flashlog.getRows(1, 2).split(",");
 
