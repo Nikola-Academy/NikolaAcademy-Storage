@@ -107,10 +107,11 @@ namespace datastorage {
             let existingData = flashlog.getRows(1, 2).split(",");
 
             // Create new data array with all existing columns and values
-            data = columnList.map((col, index) => {
-                let val = col === variableName ? value : existingData[index];
-                return createCV(col, val);
-            });
+            for (let i = 0; i < columnList.length; i++) {
+                let col = columnList[i];
+                let val = (col === variableName) ? value : existingData[i];
+                data.push(createCV(col, val));
+            }
 
             // If variable name doesn't exist in columns, add it
             if (columnList.indexOf(variableName) === -1) {
@@ -395,10 +396,9 @@ namespace datastorage {
   }
 
   /**
-   * Get all rows seperated by a newline & each column seperated by a comma.
-   * Starting at the 0-based index fromRowIndex & counting inclusively until nRows.
+   * Get data from flash storage
    * @param name Variable name; eg: "name1"
-   * @returns String from the column value
+   * @returns The value associated with the variable name
    */
   //% block="get $name"
   //% fromName.shadow=datalogger_columnfield
@@ -410,15 +410,14 @@ namespace datastorage {
     
     init();
 
-    if (getNumberOfColumns() == 0) return ""; // Return empty string if no data exists
     let columnNames = flashlog.getRows(1, 1);
+    if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
 
     let columnList = columnNames.split(",");
     let index = columnList.indexOf(name);
-    if (index == -1) return ""; // Return empty string if variable not found
+    if (index == -1) return "-1"; // Return empty string if variable not found
     
     let datas = flashlog.getRows(1, 2).split(",");
-
-    return datas[index];
+    return datas[index] || "-1"; // Return the value or empty string if undefined
   }
 }
