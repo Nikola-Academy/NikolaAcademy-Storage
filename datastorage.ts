@@ -417,9 +417,9 @@ namespace datastorage {
     // let index = columnList.indexOf(name);
     // if (index == -1) return "-1"; // Return empty string if variable not found
     
-    // let datas = flashlog.getRows(1, 2).split(",");
+    let datas = flashlog.getRows(1, 2).split(",");
     // return datas[index] .lenght|| "-1"; // Return the value or empty string if undefined
-    let index = columnList.length;
-    return flashlog.getRows(1, 2).split(",")[index-1];
+    let index = datas.length;
+    return datas[index-1];
 }
 }
