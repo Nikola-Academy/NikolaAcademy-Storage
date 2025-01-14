@@ -103,8 +103,16 @@ namespace datastorage {
 
         if (columnNames.length != 0) {
             // Storage has existing data
-            let columnList: string[] = columnNames.split(",");
+            let columnList = columnNames.split(",");
             let existingData = flashlog.getRows(1, 2).split(",");
+
+            // If variable name doesn't exist in columns, add it
+            if (columnList.indexOf(variableName) === -1) {
+                data.push(createCV(variableName, value));
+            } else{
+                let index = columnList.indexOf(variableName);
+                existingData[index] = value;
+            }
 
             // Create new data array with all existing columns and values
             for (let i = 0; i < columnList.length; i++) {
@@ -113,10 +121,7 @@ namespace datastorage {
                 data.push(createCV(col, val));
             }
 
-            // If variable name doesn't exist in columns, add it
-            if (columnList.indexOf(variableName) === -1) {
-                data.push(createCV(variableName, value));
-            }
+            
         } else {
             // Storage is empty, create new entry
             data = [createCV(variableName, value)];
