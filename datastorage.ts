@@ -376,10 +376,8 @@ namespace datastorage {
   }
 
   /**
-   * Number of variable currently used by the datalogger, start counting at fromRowIndex
-   * Treats the header as the first row
-   * @param fromRowIndex 0-based index of start
-   * @returns header + rows
+   * count number of variable
+   * @returns count of variable
    */
   //% block="get variable count"
   //% blockId=dataloggergetnumberofcolumns
@@ -421,7 +419,7 @@ namespace datastorage {
    * @param name Variable name; eg: "name"
    * @returns The value associated with the variable name
    */
-  //% block="get $name"
+  //% block="get $name as text"
   //% fromName.shadow=datalogger_columnfield
   //% blockId=dataloggergetcolumn
   //% group="micro:bit (V2)"
@@ -447,7 +445,7 @@ namespace datastorage {
    * @param name Variable name; eg: "name"
    * @returns The value associated with the variable name
    */
-  //% block="get $name"
+  //% block="get $name as number"
   //% fromName.shadow=datalogger_columnfield
   //% blockId=dataloggergetcolumnnum
   //% group="micro:bit (V2)"
