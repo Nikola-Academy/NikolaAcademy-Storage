@@ -93,8 +93,8 @@ namespace datastorage {
     //% group="micro:bit (V2)"
     //% weight=100
     export function saveData(variableName: string, value: any): void {
-        if (_disabled) return;
-        if (!variableName || value === undefined) return;
+        // if (_disabled) return;
+        // if (!variableName || value === undefined) return;
 
         init();
 
@@ -102,9 +102,10 @@ namespace datastorage {
         let columnNames = flashlog.getRows(1, 1);
 
         if (columnNames.length != 0) {
+            let existingData = flashlog.getRows(1, 2).split(",");
             // Storage has existing data
             let columnList = columnNames.split(",");
-            let existingData = flashlog.getRows(1, 2).split(",");
+            
 
             // If variable name doesn't exist in columns, add it
             if (columnList.indexOf(variableName) == -1) {
@@ -430,16 +431,14 @@ namespace datastorage {
     
     init();
 
-    // let columnNames = flashlog.getRows(1, 1);
-    // if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
+    let columnNames = flashlog.getRows(1, 1);
+    if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
 
-    // let columnList = columnNames.split(",");
-    // let index = columnList.indexOf(name);
-    // if (index == -1) return "-1"; // Return empty string if variable not found
+    let columnList = columnNames.split(",");
+    let index = columnList.indexOf(name);
+    if (index == -1) return "-1"; // Return empty string if variable not found
     
     let datas = flashlog.getRows(1, 2).split(",");
-    // return datas[index] .lenght|| "-1"; // Return the value or empty string if undefined
-    let index = datas.length;
-    return datas[index-1];
+    return datas[index];
 }
 }
