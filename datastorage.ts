@@ -417,7 +417,7 @@ namespace datastorage {
   }
 
   /**
-   * Get data from flash storage
+   * Get data as text from flash storage
    * @param name Variable name; eg: "name"
    * @returns The value associated with the variable name
    */
@@ -425,7 +425,7 @@ namespace datastorage {
   //% fromName.shadow=datalogger_columnfield
   //% blockId=dataloggergetcolumn
   //% group="micro:bit (V2)"
-  //% weight=95 help=datalogger/get-rows
+  //% weight=94 help=datalogger/get-rows
   export function getData(name: string): string {
     if (!name) return ""; // Return empty string if name is null/empty
     
@@ -440,5 +440,32 @@ namespace datastorage {
     
     let datas = flashlog.getRows(1, 1).split(",");
     return datas[index];
-}
+  }
+
+  /**
+   * Get data as number from flash storage
+   * @param name Variable name; eg: "name"
+   * @returns The value associated with the variable name
+   */
+  //% block="get $name"
+  //% fromName.shadow=datalogger_columnfield
+  //% blockId=dataloggergetcolumnnum
+  //% group="micro:bit (V2)"
+  //% weight=95 help=datalogger/get-rows
+  export function getDataNum(name: string): number {
+    if (!name) return -1; // Return empty string if name is null/empty
+    
+    init();
+
+    let columnNames = flashlog.getRows(0, 1);
+    if (columnNames.length == 0) return -1; // Return empty string if no data exists
+
+    let columnList = columnNames.split(",");
+    let index = columnList.indexOf(name);
+    if (index == -1) return -1; // Return empty string if variable not found
+    
+    let datas = flashlog.getRows(1, 1).split(",");
+    return parseFloat(datas[index]);
+  }
+
 }
