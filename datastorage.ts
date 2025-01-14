@@ -309,7 +309,7 @@ namespace datastorage {
     //% weight=85 help=datalogger/delete-log
     export function deleteLog(): void {
         init();
-        flashlog.clear(true); //false:fast, true:full
+        flashlog.clear(false); //false:fast, true:full
     }
 
     /**
