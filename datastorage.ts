@@ -87,9 +87,9 @@ namespace datastorage {
      * @param value variable name to be stored to flash storage
      */
     //% block="set $variableName in storage to $value"
-    //% blockId=dataloggerlogdata
-    //% data.shadow=lists_create_with
-    //% data.defl=dataloggercreatecolumnvalue
+    //% blockId=dataloggersaveData
+    //% variableName.shadow=datalogger_columnfield
+    //% value.shadow=text
     //% group="micro:bit (V2)"
     //% weight=100
     export function saveData(variableName: string, value: any): void {
@@ -135,6 +135,21 @@ namespace datastorage {
             flashlog.logData(cv.column, cv.value);
         }
         flashlog.endRow();
+    }
+
+    /**
+     * Save data to long term Micro:bit storage
+     * @param variableName variable name to be stored to flash storage
+     * @param value variable name to be stored to flash storage
+     */
+    //% block="set $variableName in storage to $value"
+    //% blockId=dataloggersaveDatanum
+    //% variableName.shadow=datalogger_columnfield
+    //% value.shadow=math_number
+    //% group="micro:bit (V2)"
+    //% weight=99
+    export function saveDataNum(variableName: string, value: any): void {
+        saveData(variableName, value);
     }
 
     /**
@@ -290,7 +305,7 @@ namespace datastorage {
     //% block="delete storage"
     //% blockId=dataloggerdeletelog
     //% group="micro:bit (V2)"
-    //% weight=97 help=datalogger/delete-log
+    //% weight=85 help=datalogger/delete-log
     export function deleteLog(): void {
         init();
         flashlog.clear(true); //false:fast, true:full
@@ -368,7 +383,7 @@ namespace datastorage {
   //% block="get variable count"
   //% blockId=dataloggergetnumberofcolumns
   //% group="micro:bit (V2)"
-  //% weight=98 help=datalogger/get-number-of-columns
+  //% weight=90 help=datalogger/get-number-of-columns
   export function getNumberOfColumns(): number {
     init();
 
@@ -409,7 +424,7 @@ namespace datastorage {
   //% fromName.shadow=datalogger_columnfield
   //% blockId=dataloggergetcolumn
   //% group="micro:bit (V2)"
-  //% weight=99 help=datalogger/get-rows
+  //% weight=95 help=datalogger/get-rows
   export function getData(name: string): string {
     if (!name) return ""; // Return empty string if name is null/empty
     
