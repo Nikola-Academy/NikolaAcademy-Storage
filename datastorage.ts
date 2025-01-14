@@ -409,10 +409,14 @@ namespace datastorage {
   //% group="micro:bit (V2)"
   //% blockHidden=true
   //% weight=80 help=datalogger/get-rows
-  export function getRows(fromRowIndex: number, nRows: number): string {
-      init();
-      return flashlog.getRows(fromRowIndex, nRows);
+  export function dummyFunction(fromRowIndex: number, nRows: number): string {
+    init();
+    return "-1";
   }
+    //   export function getRows(fromRowIndex: number, nRows: number): string {
+    //       init();
+    //       return flashlog.getRows(fromRowIndex, nRows);
+    //   }
 
   /**
    * Get data as text from flash storage
