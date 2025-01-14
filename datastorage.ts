@@ -432,6 +432,7 @@ namespace datastorage {
     init();
 
     let columnNames = flashlog.getRows(1, 1);
+    return columnNames;
     if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
 
     let columnList = columnNames.split(",");
