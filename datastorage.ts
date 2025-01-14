@@ -409,7 +409,7 @@ namespace datastorage {
   //% nRows.shadow=math_number
   //% blockId=dataloggergetrows
   //% group="micro:bit (V2)"
-  //% blockHidden=true
+  //% blockHidden=false
   //% weight=80 help=datalogger/get-rows
   export function getRows(fromRowIndex: number, nRows: number): string {
       init();
@@ -431,8 +431,8 @@ namespace datastorage {
     
     init();
 
-    let columnNames = flashlog.getRows(1, 1);
-    return columnNames;
+    let columnNames = flashlog.getRows(0, 1);
+    // return columnNames;
     if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
 
     let columnList = columnNames.split(",");
