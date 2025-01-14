@@ -420,7 +420,7 @@ namespace datastorage {
    * @returns The value associated with the variable name
    */
   //% block="get $name as text"
-  //% fromName.shadow=datalogger_columnfield
+  //% name.shadow=datalogger_columnfield
   //% blockId=dataloggergetcolumn
   //% group="micro:bit (V2)"
   //% weight=94 help=datalogger/get-rows
@@ -446,7 +446,7 @@ namespace datastorage {
    * @returns The value associated with the variable name
    */
   //% block="get $name as number"
-  //% fromName.shadow=datalogger_columnfield
+  //% name.shadow=datalogger_columnfield
   //% blockId=dataloggergetcolumnnum
   //% group="micro:bit (V2)"
   //% weight=95 help=datalogger/get-rows
