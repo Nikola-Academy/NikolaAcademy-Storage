@@ -99,10 +99,10 @@ namespace datastorage {
         init();
 
         let data: ColumnValue[] = [];
-        let columnNames = flashlog.getRows(1, 1);
+        let columnNames = flashlog.getRows(0, 1);
 
         if (columnNames.length != 0) {
-            let existingData = flashlog.getRows(1, 2).split(",");
+            let existingData = flashlog.getRows(1, 1).split(",");
             // Storage has existing data
             let columnList = columnNames.split(",");
             
@@ -409,7 +409,7 @@ namespace datastorage {
   //% nRows.shadow=math_number
   //% blockId=dataloggergetrows
   //% group="micro:bit (V2)"
-  //% blockHidden=false
+  //% blockHidden=true
   //% weight=80 help=datalogger/get-rows
   export function getRows(fromRowIndex: number, nRows: number): string {
       init();
@@ -432,14 +432,13 @@ namespace datastorage {
     init();
 
     let columnNames = flashlog.getRows(0, 1);
-    // return columnNames;
     if (columnNames.length == 0) return "-1"; // Return empty string if no data exists
 
     let columnList = columnNames.split(",");
     let index = columnList.indexOf(name);
     if (index == -1) return "-1"; // Return empty string if variable not found
     
-    let datas = flashlog.getRows(1, 2).split(",");
+    let datas = flashlog.getRows(1, 1).split(",");
     return datas[index];
 }
 }
