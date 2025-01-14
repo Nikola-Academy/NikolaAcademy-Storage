@@ -82,9 +82,9 @@ namespace datastorage {
     }
 
     /**
-     * Save data to long term Micro:bit storage
-     * @param variableName variable name to be stored to flash storage
-     * @param value variable name to be stored to flash storage
+     * Save text data to long term Micro:bit storage
+     * @param variableName variable name to be stored to flash storage; eg: "name"
+     * @param value variable name to be stored to flash storage; eg: "value"
      */
     //% block="set $variableName in storage to $value"
     //% blockId=dataloggersaveData
@@ -107,7 +107,7 @@ namespace datastorage {
             let existingData = flashlog.getRows(1, 2).split(",");
 
             // If variable name doesn't exist in columns, add it
-            if (columnList.indexOf(variableName) === -1) {
+            if (columnList.indexOf(variableName) == -1) {
                 data.push(createCV(variableName, value));
             } else{
                 let index = columnList.indexOf(variableName);
@@ -117,7 +117,7 @@ namespace datastorage {
             // Create new data array with all existing columns and values
             for (let i = 0; i < columnList.length; i++) {
                 let col = columnList[i];
-                let val = (col === variableName) ? value : existingData[i];
+                let val = existingData[i];
                 data.push(createCV(col, val));
             }
 
@@ -138,9 +138,9 @@ namespace datastorage {
     }
 
     /**
-     * Save data to long term Micro:bit storage
-     * @param variableName variable name to be stored to flash storage
-     * @param value variable name to be stored to flash storage
+     * Save number data to long term Micro:bit storage
+     * @param variableName variable name to be stored to flash storage; eg: "name"
+     * @param value variable name to be stored to flash storage; eg: "value"
      */
     //% block="set $variableName in storage to $value"
     //% blockId=dataloggersaveDatanum
@@ -417,7 +417,7 @@ namespace datastorage {
 
   /**
    * Get data from flash storage
-   * @param name Variable name; eg: "name1"
+   * @param name Variable name; eg: "name"
    * @returns The value associated with the variable name
    */
   //% block="get $name"
